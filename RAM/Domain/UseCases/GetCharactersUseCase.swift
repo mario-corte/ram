@@ -9,11 +9,17 @@ import Combine
 import RAMData
 
 struct GetCharactersUseCase {
-    let repository: RAMRespository = RAMRepositoryImpl(dataSource: RAMDataSourceImpl())
+    var repository: RAMRespository = RAMRepositoryImpl(dataSource: RAMDataSourceImpl())
+    
+    init() { }
+    
+    init(repository: RAMRespository) {
+        self.repository = repository
+    }
     
     // Combine
-    func getCharacters(for page: Int, name: String) -> AnyPublisher<CharactersModel, APIError> {
-        repository.getCharacters(for: page, name: name)
+    func getCharacters(for page: Int, name: String?, status: String?, gender: String?) -> AnyPublisher<CharactersModel, APIError> {
+        repository.getCharacters(for: page, name: name, status: status, gender: gender)
     }
     
     // Async/Await

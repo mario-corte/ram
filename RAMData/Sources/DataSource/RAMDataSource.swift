@@ -10,15 +10,18 @@ import Combine
 
 public protocol RAMDataSource {
     // Combine
-    func getCharacters(for page: Int, name: String) -> AnyPublisher<Characters, APIError>
+    func getCharacters(for page: Int, name: String?, status: String?, gender: String?) -> AnyPublisher<Characters, APIError>
     func getEpisodes(for page: Int) -> AnyPublisher<Episodes, APIError>
-    func getEpisode(_ episode: String) -> AnyPublisher<Episode, APIError>
+    func getEpisodes(_ episodes: [Int]) -> AnyPublisher<[Episode], APIError>
     
     // Async/Await
     func getCharactersAsync(for page: Int, name: String?, status: String?, gender: String?) async throws -> Characters
+    func getEpisodesAsync(for page: Int) async throws -> Episodes
     func getEpisodesAsync(_ episodes: [Int]) async throws -> [Episode]
     
     // Callback
+    func getCharacters(for page: Int, name: String?, status: String?, gender: String?, completion: @escaping (Result<Characters, APIError>) -> Void)
+    func getEpisodes(for page: Int, completion: @escaping (Result<Episodes, APIError>) -> Void)
     func getEpisodes(_ episodes: [Int], completion: @escaping (Result<[Episode], APIError>) -> Void)
 }
 
@@ -30,10 +33,17 @@ public struct RAMDataSourceImpl: RAMDataSource {
 
 // Combine
 extension RAMDataSourceImpl {
-    public func getCharacters(for page: Int, name: String) -> AnyPublisher<Characters, APIError> {
+    public func getCharacters(for page: Int, name: String?, status: String?, gender: String?) -> AnyPublisher<Characters, APIError> {
         var queryItems = [APIQueryItem.Page.rawValue: String(page)]
-        if !name.isEmpty {
+        
+        if let name = name {
             queryItems.updateValue(name, forKey: APIQueryItem.Name.rawValue)
+        }
+        if let status = status {
+            queryItems.updateValue(status, forKey: APIQueryItem.Status.rawValue)
+        }
+        if let gender = gender {
+            queryItems.updateValue(gender, forKey: APIQueryItem.Gender.rawValue)
         }
         
         guard let url = url(for: Endpoint.CharacterURL, queryItems: queryItems) else {
@@ -54,15 +64,13 @@ extension RAMDataSourceImpl {
         return sendRequestPublisher(Episodes.self, url: url)
     }
     
-    public func getEpisode(_ episode: String) -> AnyPublisher<Episode, APIError> {
-        guard let url = url(for: Endpoint.EpisodeURL,
-                            queryItems: [APIQueryItem.Episode.rawValue: episode])
-        else {
+    public func getEpisodes(_ episodes: [Int]) -> AnyPublisher<[Episode], APIError> {
+        guard let url = URL(string: Endpoint.EpisodeURL)?.appending(path: episodes.description) else {
             return Fail(error: APIError.InvalidURL)
                 .eraseToAnyPublisher()
         }
         
-        return sendRequestPublisher(Episode.self, url: url)
+        return sendRequestPublisher([Episode].self, url: url)
     }
 }
 
@@ -88,6 +96,14 @@ extension RAMDataSourceImpl {
         return try await sendAsyncRequest(Characters.self, url: url)
     }
     
+    public func getEpisodesAsync(for page: Int) async throws -> Episodes {
+        let queryItems = [APIQueryItem.Page.rawValue: String(page)]
+        guard let url = url(for: Endpoint.EpisodeURL, queryItems: queryItems) else {
+            throw APIError.InvalidURL
+        }
+        return try await sendAsyncRequest(Episodes.self, url: url)
+    }
+    
     public func getEpisodesAsync(_ episodes: [Int]) async throws -> [Episode] {
         guard let url = URL(string: Endpoint.EpisodeURL)?.appending(path: episodes.description) else {
             throw APIError.InvalidURL
@@ -98,6 +114,36 @@ extension RAMDataSourceImpl {
 
 // Callback
 extension RAMDataSourceImpl {
+    public func getCharacters(for page: Int, name: String?, status: String?, gender: String?, completion: @escaping (Result<Characters, APIError>) -> Void) {
+        var queryItems = [APIQueryItem.Page.rawValue: String(page)]
+        
+        if let name = name {
+            queryItems.updateValue(name, forKey: APIQueryItem.Name.rawValue)
+        }
+        if let status = status {
+            queryItems.updateValue(status, forKey: APIQueryItem.Status.rawValue)
+        }
+        if let gender = gender {
+            queryItems.updateValue(gender, forKey: APIQueryItem.Gender.rawValue)
+        }
+        
+        guard let url = url(for: Endpoint.CharacterURL, queryItems: queryItems) else {
+            completion(.failure(APIError.InvalidURL))
+            return
+        }
+        
+        sendRequest(Characters.self, url: url, completion: completion)
+    }
+    
+    public func getEpisodes(for page: Int, completion: @escaping (Result<Episodes, APIError>) -> Void) {
+        let queryItems = [APIQueryItem.Page.rawValue: String(page)]
+        guard let url = url(for: Endpoint.EpisodeURL, queryItems: queryItems) else {
+            completion(.failure(APIError.InvalidURL))
+            return
+        }
+        sendRequest(Episodes.self, url: url, completion: completion)
+    }
+    
     public func getEpisodes(_ episodes: [Int], completion: @escaping (Result<[Episode], APIError>) -> Void) {
         guard let url = URL(string: Endpoint.EpisodeURL)?.appending(path: episodes.description) else {
             completion(.failure(APIError.InvalidURL))
@@ -140,7 +186,7 @@ private extension RAMDataSourceImpl {
                 }
                 return data
             })
-            .decode(type: T.self, decoder: JSONDecoder())
+            .decode(type: type, decoder: JSONDecoder())
             .mapError({ error in
                 switch error {
                 case is DecodingError:      return APIError.FailedToDecode

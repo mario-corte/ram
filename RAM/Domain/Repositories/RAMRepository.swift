@@ -10,15 +10,18 @@ import RAMData
 
 protocol RAMRespository {
     // Combine
-    func getCharacters(for page: Int, name: String) -> AnyPublisher<CharactersModel, APIError>
+    func getCharacters(for page: Int, name: String?, status: String?, gender: String?) -> AnyPublisher<CharactersModel, APIError>
     func getEpisodes(for page: Int) -> AnyPublisher<EpisodesModel, APIError>
-    func getEpisode(_ episode: String) -> AnyPublisher<EpisodeModel, APIError>
+    func getEpisodes(_ episodes: [Int]) -> AnyPublisher<[EpisodeModel], APIError>
     
     // Async/Await
     func getCharactersAsync(for page: Int, name: String?, status: String?, gender: String?) async throws -> CharactersModel
+    func getEpisodesAsync(for page: Int) async throws -> EpisodesModel
     func getEpisodesAsync(_ episodes: [Int]) async throws -> [EpisodeModel]
     
     // Callback
+    func getCharacters(for page: Int, name: String?, status: String?, gender: String?, completion: @escaping (Result<CharactersModel, APIError>) -> Void)
+    func getEpisodes(for page: Int, completion: @escaping (Result<EpisodesModel, APIError>) -> Void)
     func getEpisodes(_ episodes: [Int], completion: @escaping (Result<[EpisodeModel], APIError>) -> Void)
 }
 
@@ -26,10 +29,10 @@ struct RAMRepositoryImpl: RAMRespository {
     let dataSource: RAMDataSource
 }
 
-// MARK: Combine
+// MARK: - Combine
 extension RAMRepositoryImpl {
-    func getCharacters(for page: Int, name: String) -> AnyPublisher<CharactersModel, APIError> {
-        dataSource.getCharacters(for: page, name: name)
+    func getCharacters(for page: Int, name: String?, status: String?, gender: String?) -> AnyPublisher<CharactersModel, APIError> {
+        dataSource.getCharacters(for: page, name: name, status: status, gender: gender)
             .map { CharactersModel($0) }
             .eraseToAnyPublisher()
     }
@@ -39,19 +42,24 @@ extension RAMRepositoryImpl {
             .map { EpisodesModel($0) }
             .eraseToAnyPublisher()
     }
-
-    func getEpisode(_ episode: String) -> AnyPublisher<EpisodeModel, APIError> {
-        dataSource.getEpisode(episode)
-            .map { EpisodeModel($0) }
+    
+    func getEpisodes(_ episodes: [Int]) -> AnyPublisher<[EpisodeModel], APIError> {
+        dataSource.getEpisodes(episodes)
+            .map { $0.map { EpisodeModel($0) }}
             .eraseToAnyPublisher()
     }
 }
 
-// MARK: Async/Await
+// MARK: - Async/Await
 extension RAMRepositoryImpl {
     func getCharactersAsync(for page: Int, name: String?, status: String?, gender: String?) async throws -> CharactersModel {
         let characters = try await dataSource.getCharactersAsync(for: page, name: name, status: status, gender: gender)
         return CharactersModel(characters)
+    }
+    
+    func getEpisodesAsync(for page: Int) async throws -> EpisodesModel {
+        let episodes = try await dataSource.getEpisodesAsync(for: page)
+        return EpisodesModel(episodes)
     }
 
     func getEpisodesAsync(_ episodes: [Int]) async throws -> [EpisodeModel] {
@@ -59,8 +67,30 @@ extension RAMRepositoryImpl {
     }
 }
 
-// MARK: Callback
+// MARK: - Callback
 extension RAMRepositoryImpl {
+    func getCharacters(for page: Int, name: String?, status: String?, gender: String?, completion: @escaping (Result<CharactersModel, APIError>) -> Void) {
+        dataSource.getCharacters(for: page, name: name, status: status, gender: gender) { result in
+            switch result {
+            case .success(let model):
+                completion(.success(CharactersModel(model)))
+            case .failure(let error):
+                return completion(.failure(error))
+            }
+        }
+    }
+    
+    func getEpisodes(for page: Int, completion: @escaping (Result<EpisodesModel, APIError>) -> Void) {
+        dataSource.getEpisodes(for: page) { result in
+            switch result {
+            case .success(let model):
+                completion(.success(EpisodesModel(model)))
+            case .failure(let error):
+                return completion(.failure(error))
+            }
+        }
+    }
+    
     func getEpisodes(_ episodes: [Int], completion: @escaping (Result<[EpisodeModel], APIError>) -> Void) {
         dataSource.getEpisodes(episodes) { result in
             switch result {

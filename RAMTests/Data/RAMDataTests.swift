@@ -13,7 +13,7 @@ final class RAMDataTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
-        sut = RAMDataSourceImpl()
+        sut = RAMDataSourceMock()
     }
     
     override func tearDown() {
@@ -39,7 +39,7 @@ extension RAMDataTests {
     
     func testGetCharactersWithError() async {
         do {
-            let characters = try await sut.getCharactersAsync(for: 1, name: "dasdas", status: "dsdasdas", gender: "dqdwqdwq")
+            let characters = try await sut.getCharactersAsync(for: 0, name: nil, status: nil, gender: nil)
             XCTAssertTrue(characters.results.isEmpty)
         }
         catch {
@@ -54,9 +54,9 @@ extension RAMDataTests {
     func testGetEpisodes() async {
         let episodesBuilder = EpisodesBuilder().build()
         do {
-            let episodes = try await sut.getEpisodesAsync([1])
-            XCTAssertTrue(episodes.count == 1)
-            XCTAssertTrue(episodes.first?.id == episodesBuilder.results.first?.id)
+            let episodes = try await sut.getEpisodesAsync(for: 1)
+            XCTAssertNil(episodes.info.prev)
+            XCTAssertTrue(episodes.results.first?.id == episodesBuilder.results.first?.id)
         }
         catch {
             XCTAssertNil(error)
@@ -64,6 +64,33 @@ extension RAMDataTests {
     }
     
     func testGetEpisodesWithError() async {
+        do {
+            let episodes = try await sut.getEpisodesAsync(for: 0)
+            XCTAssertTrue(episodes.results.isEmpty)
+        }
+        catch {
+            XCTAssertNotNil(error)
+        }
+    }
+}
+
+
+// MARK: - Get Character Episodes
+
+extension RAMDataTests {
+    func testGetCharacterEpisodes() async {
+        let episodesBuilder = EpisodesBuilder().build()
+        do {
+            let episodes = try await sut.getEpisodesAsync([1,2,3,4,5])
+            XCTAssertTrue(episodes.count == 5)
+            XCTAssertTrue(episodes.first?.id == episodesBuilder.results.first?.id)
+        }
+        catch {
+            XCTAssertNil(error)
+        }
+    }
+    
+    func testGetCharacterEpisodesWithError() async {
         do {
             let episodes = try await sut.getEpisodesAsync([])
             XCTAssertTrue(episodes.count == 0)

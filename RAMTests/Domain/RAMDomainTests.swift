@@ -14,7 +14,7 @@ final class RAMDomainTests: XCTestCase {
     
     override func setUp() {
         super.setUp()
-        sut = GetCharactersUseCase()
+        sut = GetCharactersUseCase(repository: RAMRepositoryImpl(dataSource: RAMDataSourceMock()))
     }
     
     override func tearDown() {
@@ -22,6 +22,8 @@ final class RAMDomainTests: XCTestCase {
         super.tearDown()
     }
 }
+
+// MARK: - Get Characters
 
 extension RAMDomainTests {
     func testGetCharacters() async {
@@ -38,7 +40,7 @@ extension RAMDomainTests {
     
     func testGetCharactersError() async {
         do {
-            let characters = try await sut.getCharactersAsync(for: 1, name: "dadasdsa", status: "djhkk", gender: "iououi")
+            let characters = try await sut.getCharactersAsync(for: 0, name: nil, status: nil, gender: nil)
             XCTAssertTrue(characters.characters.isEmpty)
         }
         catch {

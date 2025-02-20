@@ -11,6 +11,7 @@ import Foundation
 
 public enum APIError: Error {
     case InvalidURL
+    case InvalidFilePath
     case InvalidResponse
     case FailedToDecode
     case Unknown
@@ -44,6 +45,7 @@ extension APIError: LocalizedError {
     public var errorDescription: String? {
         switch self {
         case .InvalidURL:           return "Invalid URL"
+        case .InvalidFilePath:      return "Invalid File Path"
         case .InvalidResponse:      return "Unexpected Status Code"
         case .FailedToDecode:       return "Failed to Decode"
         case .Unknown:              return "Unknown Error"

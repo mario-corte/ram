@@ -191,7 +191,11 @@ private extension CharactersListViewModel {
     }
     
     func getCharacters(at page: Int) {
-        getCharactersUseCase.getCharacters(for: page, name: searchText)
+        let name = searchText.isEmpty ? nil : searchText
+        let status = selectedStatus == defaultStatus ? nil : selectedStatus
+        let gender = selectedGender == defaultGender ? nil : selectedGender
+        
+        getCharactersUseCase.getCharacters(for: page, name: name, status: status, gender: gender)
             .sink { [weak self] completion in
                 if case let .failure(error) = completion,
                    let errorDescription = error.errorDescription {

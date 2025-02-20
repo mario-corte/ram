@@ -52,6 +52,7 @@
 		3008F8882D61EDFA001C12F3 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3008F8872D61EDFA001C12F3 /* AppCoordinator.swift */; };
 		3008F88A2D620774001C12F3 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3008F8892D620774001C12F3 /* HomeView.swift */; };
 		3008F88D2D62094C001C12F3 /* CharactersCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3008F88C2D62094C001C12F3 /* CharactersCoordinator.swift */; };
+		308EE9672D678167004B4E9B /* RAMData in Frameworks */ = {isa = PBXBuildFile; productRef = 308EE9662D678167004B4E9B /* RAMData */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -117,6 +118,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				3008F86C2D5FC14F001C12F3 /* RAMData in Frameworks */,
+				308EE9672D678167004B4E9B /* RAMData in Frameworks */,
 				3008F8702D5FC1DE001C12F3 /* RAMData in Frameworks */,
 				3008F7B72D5E4F92001C12F3 /* NukeUI in Frameworks */,
 			);
@@ -442,6 +444,7 @@
 				3008F7B62D5E4F92001C12F3 /* NukeUI */,
 				3008F86B2D5FC14F001C12F3 /* RAMData */,
 				3008F86F2D5FC1DE001C12F3 /* RAMData */,
+				308EE9662D678167004B4E9B /* RAMData */,
 			);
 			productName = RAM;
 			productReference = 30682AC72D5DF622005ED1C1 /* RAM.app */;
@@ -496,7 +499,7 @@
 			mainGroup = 30682ABE2D5DF622005ED1C1;
 			packageReferences = (
 				3008F7B52D5E4F92001C12F3 /* XCRemoteSwiftPackageReference "Nuke" */,
-				3008F86E2D5FC1DD001C12F3 /* XCLocalSwiftPackageReference "RAMData" */,
+				308EE9652D678167004B4E9B /* XCLocalSwiftPackageReference "RAMData" */,
 			);
 			productRefGroup = 30682AC82D5DF622005ED1C1 /* Products */;
 			projectDirPath = "";
@@ -849,7 +852,7 @@
 /* End XCConfigurationList section */
 
 /* Begin XCLocalSwiftPackageReference section */
-		3008F86E2D5FC1DD001C12F3 /* XCLocalSwiftPackageReference "RAMData" */ = {
+		308EE9652D678167004B4E9B /* XCLocalSwiftPackageReference "RAMData" */ = {
 			isa = XCLocalSwiftPackageReference;
 			relativePath = RAMData;
 		};
@@ -877,6 +880,10 @@
 			productName = RAMData;
 		};
 		3008F86F2D5FC1DE001C12F3 /* RAMData */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = RAMData;
+		};
+		308EE9662D678167004B4E9B /* RAMData */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = RAMData;
 		};
