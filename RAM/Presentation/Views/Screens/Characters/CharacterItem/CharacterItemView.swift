@@ -16,8 +16,6 @@ struct CharacterItemView: View {
             content:
                 VStack{
                     VStack {
-//                        RemoteImage(url: viewModel.image)
-//                            .scaledToFill()
                         LazyImage(url: viewModel.imageUrl, content: { image in
                             image.image?
                                 .resizable()

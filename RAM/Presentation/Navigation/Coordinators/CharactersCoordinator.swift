@@ -40,7 +40,7 @@ extension CharactersCoordinator: AppCoordinator {
     func redirect(_ path: CharactersSteps) -> some View {
         switch path {
         case .detail(let viewModel):
-            let detailViewModel = CharacterDetailViewModel(coordinator: self, characterViewModel: viewModel)
+            let detailViewModel = CharacterDetailViewModel(characterViewModel: viewModel, coordinator: self)
             CharacterDetailView(viewModel: detailViewModel)
         case .filter:
             EmptyView()

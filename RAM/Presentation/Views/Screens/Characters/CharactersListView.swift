@@ -10,14 +10,6 @@ import SwiftUI
 struct CharactersListView: View {
     @ObservedObject var viewModel: CharactersListViewModel
     
-    init() {
-        self.viewModel = CharactersListViewModel()
-    }
-    
-    init(viewModel: CharactersListViewModel) {
-        self.viewModel = viewModel
-    }
-    
     var body: some View {
         NavigationStack {
             VStack {
@@ -84,12 +76,6 @@ private extension CharactersListView {
     
     var itemsView: some View {
         ForEach(viewModel.characters, id: \.self) { character in
-            
-//            NavigationLink(destination: CharacterDetailView(viewModel: CharacterDetailViewModel(characterViewModel: character))) {
-//                CharacterItemView(viewModel: character)
-//                    .padding(.top, 4)
-//            }
-            
             CharacterItemView(viewModel: character)
                 .padding(.top, 4)
                 .onTapGesture {

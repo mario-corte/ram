@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LocationsListView: View {
-    @ObservedObject private var viewModel = LocationsListViewModel()
+    @ObservedObject var viewModel: LocationsListViewModel
     
     var body: some View {
         NavigationView {
@@ -46,4 +46,3 @@ private extension LocationsListView{
         ErrorEmptyView(viewModel: viewModel.errorViewModel)
     }
 }
-

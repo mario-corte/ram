@@ -10,8 +10,6 @@ import NukeUI
 
 struct CharacterDetailView: View {
     let viewModel: CharacterDetailViewModel
-    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
-    @State private var showTitle = false
     
     var body: some View {
         ScrollView  {
@@ -23,12 +21,6 @@ struct CharacterDetailView: View {
         .navigationBarBackButtonHidden(true)
         .navigationBarItems(leading: backButton)
         .toolbarTitleDisplayMode(.inline)
-        .navigationTitle(showTitle ? viewModel.characterViewModel.name : String())
-//        .onScrollGeometryChange(for: Double.self) { geometry in
-//            geometry.contentOffset.y
-//        } action: { _, newValue in
-//            showTitle = newValue > 2
-//        }
     }
 }
 
@@ -43,18 +35,12 @@ private struct HeaderView: View {
             Spacer()
                 .frame(height: isScrolled ? headerHeidht + offsetY : headerHeidht)
                 .background {
-//                    RemoteImage(url: viewModel.characterViewModel.image)
-//                        .scaledToFill()
-//                        .offset(y: isScrolled ? -offsetY : 0)
-//                        .scaleEffect(isScrolled ? offsetY/1000 + 1 : 1)
-//                        .blur(radius: isScrolled ? offsetY/50 : 0)
                     LazyImage(url: viewModel.characterViewModel.imageUrl, content: { image in
                         image.image?
                             .resizable()
                             .scaledToFill()
                             .offset(y: isScrolled ? -offsetY : 0)
                             .scaleEffect(isScrolled ? offsetY/1000 + 1 : 1)
-//                            .blur(radius: isScrolled ? offsetY/50 : 0)
                     })
                 }
         }
@@ -144,7 +130,6 @@ private struct ContentView: View {
 private extension CharacterDetailView {
     var backButton : some View {
         Button {
-//            presentationMode.wrappedValue.dismiss()
             viewModel.coordinator.pop()
         } label: {
             Image(systemName: "chevron.backward.circle.fill")

@@ -29,7 +29,6 @@ private struct NavigationSetupModifier<CoordinatorType: AppCoordinator>: ViewMod
                 .navigationDestination(for: CoordinatorType.CoordinatorSteps.self) { step in
                     coordinator.redirect(step)
                 }
-//                .sheet(item: T##Binding<Item?>, onDismiss: T##(() -> Void)?, content: T##(Item) -> Content)
         }
     }
 }

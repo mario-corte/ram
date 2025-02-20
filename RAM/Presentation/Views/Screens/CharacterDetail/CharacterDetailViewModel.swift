@@ -8,15 +8,11 @@
 import SwiftUI
 
 class CharacterDetailViewModel {
-    @Published var coordinator: CharactersCoordinator!
     let characterViewModel: CharacterViewModel
+    var coordinator: CharactersCoordinator
     
-    init(characterViewModel: CharacterViewModel) {
+    init(characterViewModel: CharacterViewModel, coordinator: CharactersCoordinator) {
         self.characterViewModel = characterViewModel
-    }
-    
-    init(coordinator: CharactersCoordinator, characterViewModel: CharacterViewModel) {
         self.coordinator = coordinator
-        self.characterViewModel = characterViewModel
     }
 }

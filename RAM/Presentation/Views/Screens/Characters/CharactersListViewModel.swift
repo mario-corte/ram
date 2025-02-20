@@ -69,10 +69,6 @@ class CharactersListViewModel: ObservableObject {
     }
     
     // Initializer
-    init() {
-        setup()
-    }
-    
     init(coordinator: CharactersCoordinator) {
         self.coordinator = coordinator
         setup()
@@ -207,11 +203,6 @@ private extension CharactersListViewModel {
                     self?.state = .Error
                 }
             } receiveValue: { [weak self] result in
-                print(result)
-//                if page == 2 {
-//                    self?.state = .Error
-//                    return
-//                }
                 self?.currentPage = page
                 self?.pages = result.pages
                 self?.characters.append(contentsOf: result.characters.map { CharacterViewModel($0) } )
@@ -246,14 +237,7 @@ private extension CharactersListViewModel {
             let gender = selectedGender == defaultGender ? nil : selectedGender
             
             let characters = try await getCharactersUseCase.getCharactersAsync(for: page, name: name, status: status, gender: gender)
-            
-//            if page == 2 {
-//                await MainActor.run {
-//                    state = .Error
-//                }
-//                return
-//            }
-            
+
             self.currentPage = page
             self.pages = characters.pages
 

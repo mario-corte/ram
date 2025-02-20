@@ -98,10 +98,6 @@ private extension EpisodesListViewModel {
                     self?.state = .Error
                 }
             } receiveValue: { [weak self] result in
-//                if page == 2 {
-//                    self?.state = .Error
-//                    return
-//                }
                 self?.currentPage = page
                 self?.pages = result.pages
                 self?.addEpisodes(result.episodes.map { EpisodeViewModel($0) })

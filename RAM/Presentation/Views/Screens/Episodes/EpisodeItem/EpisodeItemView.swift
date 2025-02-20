@@ -29,18 +29,5 @@ struct EpisodeItemView: View {
                              leading: 0,
                              bottom: 4,
                              trailing: 0))
-        
-//        VStack(alignment: .leading) {
-//            Text("\(viewModel.number). \(viewModel.name)")
-//                .font(.headline)
-//                .fontWeight(.semibold)
-//            Text(viewModel.air_date)
-//                .font(.callout)
-//                .foregroundStyle(Color.secondaryLabel)
-//        }
-//        .frame(maxWidth: .infinity, alignment: .leading)
-//        .padding()
-//        .background(.fill)
-//        .clipShape(RoundedRectangle(cornerRadius: 10))
     }
 }

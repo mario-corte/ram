@@ -11,7 +11,6 @@ import SwiftUI
 struct RAMApp: App {
     var body: some Scene {
         WindowGroup {
-//            MainView()
             HomeView()
         }
     }

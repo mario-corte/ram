@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct EpisodesListView: View {
-    @ObservedObject private var viewModel = EpisodesListViewModel()
+    @ObservedObject var viewModel: EpisodesListViewModel
     
     var body: some View {
         NavigationView {
