@@ -17,6 +17,7 @@ class CharactersListViewModel: ObservableObject {
         didSet {
             if searchText == oldValue { return }
             if searchText.isEmpty {
+                state = .Loading
                 Task {
                     await filterCharactersAsync()
                 }
@@ -26,7 +27,7 @@ class CharactersListViewModel: ObservableObject {
     
     @Published var debouncedSearchText = String() {
         didSet {
-            if debouncedSearchText == oldValue { return }
+            state = .Loading
             Task {
                 await filterCharactersAsync()
             }
@@ -107,12 +108,11 @@ class CharactersListViewModel: ObservableObject {
     }
     
     func loadMoreCharactersAsync() async {
-        await MainActor.run {
-            if currentPage == pages {
+        if currentPage == pages {
+            await MainActor.run {
                 state = .Empty
-                return
             }
-            state = .LoadingNextPage
+            return
         }
         await getCharactersAsync(at: currentPage + 1)
     }
@@ -263,22 +263,28 @@ private extension CharactersListViewModel {
                     charactersList.append(character)
                 }
                 catch {
-                    print(error)
+                    print(error.localizedDescription)
                 }
             }
             
             await MainActor.run { [charactersList] in
                 self.characters.append(contentsOf: charactersList)
-                self.state = .Data
+                if currentPage < pages {
+                    self.state = .LoadingNextPage
+                    return
+                }
+                state = .Data
             }
         }
         catch {
             print(error.localizedDescription)
-            await MainActor.run {
-                if page == 1 {
+            if page == 1 {
+                await MainActor.run {
                     state = .DataEmpty
-                    return
                 }
+                return
+            }
+            await MainActor.run {
                 state = .Error
             }
         }

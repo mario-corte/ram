@@ -52,18 +52,16 @@ struct CharactersListView: View {
 private extension CharactersListView {
     var contentView: some View {
         ScrollView {
-            LazyVStack(spacing: 20) {
+            LazyVStack(spacing: 0) {
                 itemsView
                 switch viewModel.state {
-                case .Data:
+                case .LoadingNextPage:
                     loadingView
                         .onAppear {
                             Task {
                                 await viewModel.loadMoreCharactersAsync()
                             }
                         }
-                case .LoadingNextPage:
-                    loadingView
                 case .Error:
                     errorLoadingView
                 default:
@@ -77,7 +75,7 @@ private extension CharactersListView {
     var itemsView: some View {
         ForEach(viewModel.characters, id: \.self) { character in
             CharacterItemView(viewModel: character)
-                .padding(.top, 4)
+                .padding(.vertical, 10)
                 .onTapGesture {
                     viewModel.coordinator.pushToDetail(viewModel: character)
                 }
