@@ -63,7 +63,7 @@ extension RAMDataSourceMock {
 // MARK: Private
 private extension RAMDataSourceMock {
     func getMockResult<T: Decodable>(_ type: T.Type, for resource: String) throws -> T {
-        guard let filepath = Bundle.path(forResource: resource, ofType: "json", inDirectory: "Resources") else {
+        guard let filepath = Bundle.module.path(forResource: resource, ofType: "json") else {
             throw APIError.InvalidFilePath
         }
         guard let json = try String(contentsOfFile: filepath).data(using: .utf8) else {

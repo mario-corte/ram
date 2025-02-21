@@ -18,12 +18,10 @@ let package = Package(
         .target(
             name: "RAMData",
             resources: [
-                .copy("Resources")
-            ]
-        ),
+                .process("Mock/Resources")
+            ]),
         .testTarget(
             name: "RAMDataTests",
-            dependencies: ["RAMData"]
-        ),
+            dependencies: ["RAMData"]),
     ]
 )
