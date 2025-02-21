@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 56;
+	objectVersion = 60;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -49,7 +49,7 @@
 		3008F8882D61EDFA001C12F3 /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3008F8872D61EDFA001C12F3 /* AppCoordinator.swift */; };
 		3008F88A2D620774001C12F3 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3008F8892D620774001C12F3 /* HomeView.swift */; };
 		3008F88D2D62094C001C12F3 /* CharactersCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3008F88C2D62094C001C12F3 /* CharactersCoordinator.swift */; };
-		3083279D2D68882000BA8AA3 /* RAMData in Frameworks */ = {isa = PBXBuildFile; productRef = 3083279C2D68882000BA8AA3 /* RAMData */; };
+		308327A32D688BB700BA8AA3 /* RAMData in Frameworks */ = {isa = PBXBuildFile; productRef = 308327A22D688BB700BA8AA3 /* RAMData */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -106,7 +106,6 @@
 		3008F88C2D62094C001C12F3 /* CharactersCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CharactersCoordinator.swift; sourceTree = "<group>"; };
 		30682AC72D5DF622005ED1C1 /* RAM.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = RAM.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		30682AD72D5DF625005ED1C1 /* RAMTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RAMTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		3083279B2D68878400BA8AA3 /* RAMData */ = {isa = PBXFileReference; lastKnownFileType = wrapper; path = RAMData; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -114,8 +113,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				3083279D2D68882000BA8AA3 /* RAMData in Frameworks */,
 				3008F7B72D5E4F92001C12F3 /* NukeUI in Frameworks */,
+				308327A32D688BB700BA8AA3 /* RAMData in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -395,7 +394,6 @@
 			children = (
 				3008F82E2D5FB20B001C12F3 /* RAM */,
 				30682ADA2D5DF625005ED1C1 /* RAMTests */,
-				3083279B2D68878400BA8AA3 /* RAMData */,
 				30682AC82D5DF622005ED1C1 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -437,7 +435,7 @@
 			name = RAM;
 			packageProductDependencies = (
 				3008F7B62D5E4F92001C12F3 /* NukeUI */,
-				3083279C2D68882000BA8AA3 /* RAMData */,
+				308327A22D688BB700BA8AA3 /* RAMData */,
 			);
 			productName = RAM;
 			productReference = 30682AC72D5DF622005ED1C1 /* RAM.app */;
@@ -492,6 +490,7 @@
 			mainGroup = 30682ABE2D5DF622005ED1C1;
 			packageReferences = (
 				3008F7B52D5E4F92001C12F3 /* XCRemoteSwiftPackageReference "Nuke" */,
+				3083279E2D688B2500BA8AA3 /* XCLocalSwiftPackageReference "RAMData" */,
 			);
 			productRefGroup = 30682AC82D5DF622005ED1C1 /* Products */;
 			projectDirPath = "";
@@ -842,6 +841,13 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCLocalSwiftPackageReference section */
+		3083279E2D688B2500BA8AA3 /* XCLocalSwiftPackageReference "RAMData" */ = {
+			isa = XCLocalSwiftPackageReference;
+			relativePath = RAMData;
+		};
+/* End XCLocalSwiftPackageReference section */
+
 /* Begin XCRemoteSwiftPackageReference section */
 		3008F7B52D5E4F92001C12F3 /* XCRemoteSwiftPackageReference "Nuke" */ = {
 			isa = XCRemoteSwiftPackageReference;
@@ -859,8 +865,9 @@
 			package = 3008F7B52D5E4F92001C12F3 /* XCRemoteSwiftPackageReference "Nuke" */;
 			productName = NukeUI;
 		};
-		3083279C2D68882000BA8AA3 /* RAMData */ = {
+		308327A22D688BB700BA8AA3 /* RAMData */ = {
 			isa = XCSwiftPackageProductDependency;
+			package = 3083279E2D688B2500BA8AA3 /* XCLocalSwiftPackageReference "RAMData" */;
 			productName = RAMData;
 		};
 /* End XCSwiftPackageProductDependency section */
